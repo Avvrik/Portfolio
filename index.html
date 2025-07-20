@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Julia Gallen - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #cbe7fa 0%, #fffbe6 100%);
+      color: #2d3557;
+      font-family: 'Quicksand', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fffdf7;
+      box-shadow: 0 8px 32px #e6c07b55, 0 1.5px 8px #e6c07b22;
+      border-radius: 28px;
+      max-width: 700px;
+      width: 100%;
+      margin: 40px 0;
+      padding: 40px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .portrait {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #f6e7c1;
+      margin-bottom: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #e6c07b55;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #e6c07b;
+    }
+    .portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .name {
+      font-size: 2em;
+      font-weight: 700;
+      color: #2d3557;
+      text-align: center;
+    }
+    .role {
+      font-size: 1.1em;
+      color: #5eaaa8;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .sidebar-links {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+    .sidebar-links a {
+      color: #2d3557;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s, background 0.15s;
+      border-radius: 6px;
+      padding: 4px 10px;
+    }
+    .sidebar-links a:hover {
+      background: #f6e7c1;
+      color: #e6c07b;
+    }
+    .content {
+      width: 100%;
+      margin-top: 10px;
+    }
+    .section {
+      margin-bottom: 36px;
+      width: 100%;
+    }
+    .section:not(:last-child) {
+      border-bottom: 1px solid #f6e7c1;
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-size: 1.15em;
+      font-weight: 700;
+      color: #e6c07b;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      user-select: none;
+      padding: 8px 0;
+      position: relative;
+      text-shadow: 0 2px 8px #fffbe6cc;
+    }
+    .section-title::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 24px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #e6c07b 0%, #5eaaa8 100%);
+    }
+    .section-title .icon {
+      color: #5eaaa8;
+    }
+    .section-title .arrow {
+      display: inline-block;
+      font-size: 1.1em;
+      margin-right: 2px;
+      transition: color 0.2s;
+    }
+    .section.collapsed .section-title .arrow {
+      /* No rotation, handled by JS changing the character */
+    }
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s cubic-bezier(.4,0,.2,1), opacity 0.2s;
+      will-change: max-height, opacity;
+    }
+    .section.open .section-content {
+      max-height: 1000px;
+      opacity: 1;
+      margin-top: 16px;
+      transition: max-height 0.5s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+    }
+    ul.links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-left: 2em;
+    }
+    li {
+      margin: 0;
+      position: relative;
+      padding-left: 1.2em;
+    }
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 0.6em;
+      height: 0.6em;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e6c07b 60%, #5eaaa8 100%);
+      box-shadow: 0 0 4px #e6c07b55;
+      display: inline-block;
+    }
+    a.link {
+      color: #355c7d;
+      font-size: 1.05em;
+      font-weight: 500;
+      transition: color 0.15s;
+      word-break: break-all;
+      text-decoration: none;
+      padding-left: 0;
+    }
+    a.link:hover {
+      color: #e6c07b;
+      text-shadow: 0 0 4px #e6c07b44, 0 0 8px #5eaaa822;
+    }
+    @media (max-width: 800px) {
+      .card { max-width: 98vw; padding: 24px 4vw; }
+    }
+    @media (max-width: 500px) {
+      .card { padding: 12px 2vw; }
+      .portrait { width: 70px; height: 70px; }
+      .name { font-size: 1.2em; }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach((section, idx) => {
+        const title = section.querySelector('.section-title');
+        const arrow = title.querySelector('.arrow');
+        if (idx !== 0) {
+          section.classList.add('collapsed');
+          arrow.textContent = '\u25B6'; // ►
+        } else {
+          section.classList.add('open');
+          arrow.textContent = '\u25BC'; // ▼
+        }
+        title.addEventListener('click', function() {
+          const isOpen = section.classList.contains('open');
+          sections.forEach((s, i) => {
+            s.classList.remove('open');
+            s.classList.add('collapsed');
+            const a = s.querySelector('.section-title .arrow');
+            if (a) a.textContent = '\u25B6'; // ►
+          });
+          if (!isOpen) {
+            section.classList.add('open');
+            section.classList.remove('collapsed');
+            arrow.textContent = '\u25BC'; // ▼
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="card">
+    <div class="portrait"><img src="Jules.png" alt="Portrait"></div>
+    <div class="name">Julia Gallen</div>
+    <div class="role">DevRel, educator, writer</div>
+    <div class="sidebar-links">
+      <a href="https://x.com/Jules_Gallen" target="_blank" title="Twitter">
+        <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;"><circle cx="18" cy="18" r="18" fill="#1DA1F2"/><text x="9" y="26" font-size="18" fill="#fff" font-family="Arial, sans-serif">X</text></svg>
+        Twitter
+      </a>
+      <a href="https://www.linkedin.com/in/julia-gallen-798138205/" target="_blank" title="LinkedIn">
+        <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M33.1462 0H2.82565C2.1292 0 1.46129 0.276661 0.968827 0.76912C0.476368 1.26158 0.199707 1.9295 0.199707 2.62594V32.9465C0.199707 33.6429 0.476368 34.3109 0.968827 34.8033C1.46129 35.2958 2.1292 35.5724 2.82565 35.5724H33.1462C33.8427 35.5724 34.5106 35.2958 35.003 34.8033C35.4955 34.3109 35.7722 33.6429 35.7722 32.9465V2.62594C35.7722 1.9295 35.4955 1.26158 35.003 0.76912C34.5106 0.276661 33.8427 0 33.1462 0ZM10.8023 30.3033H5.45405V13.315H10.8023V30.3033ZM8.12446 10.9608C7.5178 10.9573 6.92574 10.7743 6.42301 10.4347C5.92028 10.0951 5.52941 9.61424 5.29972 9.05273C5.07004 8.49121 5.01184 7.87425 5.13247 7.27969C5.25309 6.68513 5.54714 6.13962 5.9775 5.71202C6.40785 5.28441 6.95523 4.99388 7.55056 4.87707C8.14588 4.76027 8.76246 4.82243 9.32249 5.05571C9.88251 5.289 10.3609 5.68295 10.6972 6.18785C11.0336 6.69274 11.2128 7.28596 11.2123 7.89264C11.2181 8.29881 11.142 8.70197 10.9886 9.07809C10.8351 9.45422 10.6076 9.79561 10.3194 10.0819C10.0313 10.3682 9.68843 10.5936 9.31133 10.7446C8.93422 10.8956 8.53058 10.9691 8.12446 10.9608ZM30.5153 30.3181H25.1696V21.0372C25.1696 18.3 24.0061 17.4552 22.5041 17.4552C20.9182 17.4552 19.3619 18.6508 19.3619 21.1063V30.3181H14.0137V13.3273H19.1569V15.6815H19.226C19.7423 14.6366 21.5506 12.8505 24.3099 12.8505C27.2941 12.8505 30.5178 14.6218 30.5178 19.8094L30.5153 30.3181Z" fill="#0A66C2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+    <div class="content">
+      <div class="section open">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">🎥</span>Videos</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://www.youtube.com/watch?v=UKB3etL6BCY&ab_channel=%5BEthCC%5DLivestream6" target="_blank">EthCC Conference Workshop</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=4BxW-tJ2x40&ab_channel=ETHBelgrade" target="_blank">Eth Belgrade Conference Talk</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=FhuMAgsMA6I&ab_channel=ETHBelgrade" target="_blank">Eth Belgrade Hackathon Workshop</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=Ts5W51ivPvc&ab_channel=NeonEVM" target="_blank">Deploy ERC20ForSPL token</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=IKk9-Lnbkvo&ab_channel=NeonEVM" target="_blank">Build a Memecoin Launchpad</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=a5bmsZV6UPo&ab_channel=NeonEVM" target="_blank">System Program Library: how to use & why</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=kSMIgb2h0-8&ab_channel=NeonEVM" target="_blank">SPL Token Program Library</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=D3ckUy732wc&ab_channel=NeonEVM" target="_blank">Raydium Program Library</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=7Cec8xR7GI4&ab_channel=NeonEVM" target="_blank">Solana-native UX in an EVM dApp (part 1)</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=7Cec8xR7GI4&ab_channel=NeonEVM" target="_blank">Solana-native UX in an EVM dApp (part 2)</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=nR_qM7CfPsI&ab_channel=NeonEVM" target="_blank">Aave flashloans with Solana composability</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=MY3PFbg9qBI&ab_channel=NeonEVM" target="_blank">AMA: How Neon EVM onboards EVM developers to Solana</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=_I9H3tECgvg&t=1481s&ab_channel=NeonEVM" target="_blank">Neon AMA: Dev Bootcamp and Beyond</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=FHuZlybJAw0&ab_channel=AzuroChannel" target="_blank">Workshop: how to build UI components with GraphQL</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section collapsed">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">✍️</span>Articles</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://www.neonevm.org/blog/how-to-use-blockscout-for-neon-evm" target="_blank">How to Use Neon Blockscout</a></li>
+            <li><a class="link" href="https://www.neonevm.org/blog/proof-of-conference-neon-at-eth-belgrade" target="_blank">Proof of Conference - Neon at Eth Belgrade</a></li>
+            <li><a class="link" href="https://www.neonevm.org/blog/unveiling-composability-whitepaper-a-unified-framework-for-ethereum-solana-interaction" target="_blank">Unveiling Composability Whitepaper</a></li>
+            <li><a class="link" href="https://medium.com/azuroprotocol/politics-and-social-events-are-coming-to-azuro-d4ed0c882b13" target="_blank">Politics and Social Events are Coming to Azuro</a></li>
+            <li><a class="link" href="https://medium.com/azuroprotocol/freebets-boosting-marketing-capabilities-in-web3-sports-predictions-de84828a23ef" target="_blank">Freebets Boosting Marketing Capabilities in Web3 Predictions</a></li>
+            <li><a class="link" href="https://medium.com/azuroprotocol/a-highway-to-azuro-ecosystem-connect-create-captivate-b44e43ad3a55" target="_blank">A Highway to the Azuro Ecosystem</a></li>
+            <li><a class="link" href="https://medium.com/azuroprotocol/bringing-the-super-app-trend-to-defi-metavault-azuro-cf5b5d38209f" target="_blank">Bringing the Super App Trend to DeFi</a></li>
+            <li><a class="link" href="https://medium.com/azuroprotocol/beyond-traditional-apy-azuros-strategy-for-liquidity-providers-ad4df60c8bbb" target="_blank">Beyond Traditional APY: Azuro’s Strategy for Liquidity Providers</a></li>
+            <li><a class="link" href="https://medium.com/azuroprotocol/under-the-hood-of-the-biggest-protocol-by-revenue-on-polygon-ba1e31b5f50f" target="_blank">Under The Hood of Polygon’s Biggest Protocol By Revenue</a></li>
+            <li><a class="link" href="https://medium.com/array-io/a-wallet-in-gear-knows-no-fear-f4a861c04a91" target="_blank">A Wallet in Gear Knows No Fear</a></li>
+            <li><a class="link" href="https://medium.com/array-io/blockchain-education-universities-programs-courses-5c38cd8de147" target="_blank">Blockchain Education: Universities, Programs, Courses</a></li>
+            <li><a class="link" href="https://medium.com/array-io/safer-than-a-bank-account-how-to-protect-your-cryptocoins-d66d620aaf62" target="_blank">Safer than a bank account? How to protect your cryptocoins</a></li>
+            <li><a class="link" href="https://medium.com/array-io/history-of-cryptography-behind-your-cryptowallets-ea43631c6303" target="_blank">History of cryptography behind your cryptowallets</a></li>
+            <li><a class="link" href="https://medium.com/array-io/a-walk-through-fresh-blockchain-business-ideas-e31eed1f97a9" target="_blank">A walk through fresh blockchain business ideas</a></li>
+            <li><a class="link" href="https://medium.com/array-io/how-to-find-the-perfect-blockchain-hackathon-for-you-f0909125cc07" target="_blank">How to find the perfect blockchain hackathon for you?</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section collapsed">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">📚</span>Documentation</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://gem.azuro.org/hub" target="_blank">Azuro Developer Hub</a></li>
+            <li><a class="link" href="https://arrayio.github.io/KeyChain/" target="_blank">KeyChain Documentation</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section collapsed">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">🎤</span>Conference Talks & Workshops</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://ethcc.io/agenda/beyond-the-evm-triggering-external-logic-with-solidity-contracts" target="_blank">EthCC Workshop</a></li>
+            <li><a class="link" href="https://ethbelgrade.rs/agenda" target="_blank">Eth Belgrade Conference Talk</a></li>
+            <li><a class="link" href="https://ethbelgrade.rs/agenda" target="_blank">Eth Belgrade Hackathon Workshop</a></li>
+            <li><a class="link" href="https://web3devrelsummit.com/" target="_blank">DevRel Summit</a></li>
+            <li><a class="link" href="http://dh.psu.ru/iii-moskovsko-tartuskaya-shkola-po-cifrovym-gumanitarnym-issledovaniyam/" target="_blank">Moscow-Tartu Digital Humanities School</a></li>
+            <li><a class="link" href="https://dhbenelux.org/2017/11/06/call-for-papers-2018-published/" target="_blank">DH Benelux</a></li>
+            <li><a class="link" href="https://elte-dh.hu/en/conf/" target="_blank">DH Budapest</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section collapsed">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">🛠️</span>Organized Hackathons & Bootcamps</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://bootcamp.neonevm.org/" target="_blank">Neon Developer Bootcamp 2025</a></li>
+            <li><a class="link" href="https://taikai.network/ethbelgrade/hackathons/eth-belgrade-hackathon-3/categories" target="_blank">Neon EVM Bounty at Eth Belgrade Hackathon</a></li>
+            <li><a class="link" href="https://gem.azuro.org/community/hackathon" target="_blank">Azuro UI Builders Hackathon 2024</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section collapsed">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">📖</span>Publications</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://hackernoon.com/no-cs-degree-no-problem-bootcamps-are-now-techs-favorite-signal" target="_blank">No CS Degree? No Problem. Bootcamps Are Now Tech's Favorite Signal</a></li>
+            <li><a class="link" href="https://link.springer.com/chapter/10.1007/978-3-030-37858-5_60" target="_blank">Automatic Mining of Cause-Effect Discourse Connectives for Russian</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section collapsed">
+        <div class="section-title"><span class="arrow">&#9654;</span><span class="icon">🔬</span>Experiments & Other Projects</div>
+        <div class="section-content">
+          <ul class="links">
+            <li><a class="link" href="https://avvrik.github.io/medieval-easter-cards-new/" target="_blank">Medieval Easter Cards (vibe-coded web app)</a></li>
+            <li><a class="link" href="https://www.mann-ivanov-ferber.ru/catalog/product/mik-ishet-druga/" target="_blank">Children’s Book with my translation from Dutch into Russian</a></li>
+            <li><a class="link" href="https://www.youtube.com/watch?v=2NtcBW5TnXE&ab_channel=JuliaGallen" target="_blank">Wrote and integrated music into a game</a></li>
+            <li><a class="link" href="https://low-protein-games.itch.io/spaced-out" target="_blank">Sound design for an indie game</a></li>
+            <li><a class="link" href="https://www.heritage-novel.com/play" target="_blank">Wrote music for a web game</a></li>
+            <li><a class="link" href="https://www.instagram.com/reel/CmoP9rajGE8/" target="_blank">Wrote music for Instagram advert</a></li>
+            <li><a class="link" href="https://soundcloud.com/vangallen" target="_blank">Wrote electronic music</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 
